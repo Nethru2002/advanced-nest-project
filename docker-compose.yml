@@ -1,0 +1,52 @@
+services:
+  # NestJS Application Service
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # FIX: Explicitly load the .env file
+    env_file:
+      - ./.env
+    container_name: nestjs_api
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    environment:
+      # This is still good practice to be explicit, but env_file is key
+      - DB_HOST=db
+    networks:
+      - app-network
+
+  # PostgreSQL Database Service
+  db:
+    image: postgres:14
+    # FIX: Explicitly load the .env file
+    env_file:
+      - ./.env
+    container_name: postgres_db
+    healthcheck:
+      # Now the variables will be correctly substituted here
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    environment:
+      # Renamed these to match the .env file for consistency
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  pgdata:
