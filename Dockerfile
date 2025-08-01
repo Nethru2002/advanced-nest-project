@@ -1,5 +1,5 @@
 # Stage 1: Build the application
-# FIX: Using Node.js v20 LTS
+# Using Node.js v20 LTS
 FROM node:20-alpine AS builder
 
 WORKDIR /usr/src/app
@@ -12,7 +12,7 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Create the production image
-# FIX: Using Node.js v20 LTS
+# Using Node.js v20 LTS
 FROM node:20-alpine
 
 # Set timezone

@@ -38,7 +38,6 @@ export class AuthService {
       throw new ConflictException('Email already in use');
     }
     const user = await this.usersService.create(registerDto);
-    // Optionally, you can log the user in immediately after registration
     return this.login({email: user.email, password: registerDto.password});
   }
 }

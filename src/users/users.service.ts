@@ -16,12 +16,12 @@ export class UsersService {
     return this.usersRepository.save(user);
   }
 
-  // FIX: Changed return type to Promise<User | null>
+  // Changed return type to Promise<User | null>
   async findOneByEmail(email: string): Promise<User | null> {
     return this.usersRepository.findOne({ where: { email } });
   }
 
-  // FIX: Changed return type to Promise<User | null>
+  // Changed return type to Promise<User | null>
   async findOneById(id: number): Promise<User | null> {
     return this.usersRepository.findOne({ where: { id } });
   }
